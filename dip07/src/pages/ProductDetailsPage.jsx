@@ -27,10 +27,15 @@ function ProductDetails({ products = [] }) {
     alert("Added to cart!");
   };
 
-  const handleBuyNow = () => {
-    addToCart(product, quantity, selectedSize);
-    navigate('/purchase');
-  };
+ const handleBuyNow = () => {
+  navigate('/buy', {
+    state: {
+      product,
+      quantity,
+      selectedSize,
+    },
+  });
+};
 
   return (
     <div className="max-w-5xl mx-auto p-6 grid md:grid-cols-2 gap-10">

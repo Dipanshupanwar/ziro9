@@ -17,6 +17,7 @@ import axios from "axios";
 
 
 
+
 function HomePage() {
      const [initialProducts, setInitialProducts] = useState([]);
   const [additionalProducts, setAdditionalProducts] = useState([]);
@@ -70,6 +71,7 @@ function HomePage() {
         title="Summer Collection" 
         showItemsInitially={3}
       />
+    
       <ProductGallery  initialProducts={initialProductsR} additionalProducts={additionalProductsR} />
 
       <Clips/>

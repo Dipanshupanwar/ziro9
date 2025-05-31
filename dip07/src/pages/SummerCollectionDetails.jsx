@@ -47,11 +47,17 @@ function SummerCollectionDetails({ summerProducts }) {
     addToCart(product, quantity, size); // Changed selectedSize to size
     alert("Added to cart!");
   };
+const handleBuyNow = () => {
+  navigate('/buy', {
+    state: {
+      product,
+      quantity,
+      selectedSize: size,
+    },
+  });
+};
 
-  const handleBuyNow = () => {
-    addToCart(product, quantity, size); // Changed selectedSize to size
-    navigate('/purchase');
-  };
+
 
   if (!product) {
     return <div className="text-center text-white py-20">Loading summer item...</div>;

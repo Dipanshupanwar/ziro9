@@ -11,6 +11,19 @@ import axios from 'axios';
 import Cart from './pages/Cart';
 import PerfumeDetails from './pages/PerfumeDetails';
 import SummerCollectionDetails from './pages/SummerCollectionDetails';
+import BuyNowPage from './pages/BuyNowPage';
+import Signup from "./components/Signup";
+import OtpVerify from "./components/OtpVerify";
+import Login from "./components/Login";
+import ProfilePage from './pages/ProfilePage';
+import About from './pages/About';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import RefundPolicy from './pages/RefundPolicy';
+import ShippingPolicy from './pages/ShippingPolicy';
+
+
+
 
 
 function App() {
@@ -53,10 +66,22 @@ function App() {
           <Route path="/new-arrival" element={<ArrivalPage/>} />
           <Route path="/contact" element={<ContactPage/>} />
           <Route path="/product/:id" element={<ProductDetails  products={productSet1}  />}/>
-         <Route path="/perfume/:id" element={<PerfumeDetails products={perfume} />}/>
+         <Route path="/perfume/:id" element={<PerfumeDetails perfumes={perfume} />}/>
          <Route path="/summer/:id" element={<SummerCollectionDetails summerProducts={summer} />} />
-
+             <Route path="/buy" element={<BuyNowPage />} />
             <Route path="/cart" element={<Cart/>} />
+             <Route path="/signup" element={<Signup />} />
+        <Route path="/verify-otp" element={<OtpVerify />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/about" element={<About />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/refund" element={<RefundPolicy />} />
+        <Route path="/shipping" element={<ShippingPolicy />} />
+
+
+      
         </Routes>
       </div>
     </BrowserRouter>

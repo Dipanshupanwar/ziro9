@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import { FaSearch, FaPhoneAlt, FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import {
+  FaUser,
+  FaSignInAlt,
+  FaShoppingCart,
+  FaBars,
+  FaTimes
+} from "react-icons/fa";import { Link } from "react-router-dom";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,8 +39,12 @@ function Navbar() {
 
         {/* Right Icons */}
         <div className="flex gap-6 text-xl cursor-pointer">
-          <FaSearch className="text-white hover:text-gray-400 transition-colors duration-300 hidden md:block" title="Search" />
-          <FaPhoneAlt className="text-white hover:text-gray-400 transition-colors duration-300 hidden md:block" title="Contact" />
+          <Link to="/profile" title="Add to Cart" className="hidden md:block">
+  <FaUser className="text-white hover:text-gray-400 transition-colors duration-300" />
+</Link> 
+       <Link to="/signup" title="Add to Cart" className="hidden md:block">
+  <FaSignInAlt className="text-white hover:text-gray-400 transition-colors duration-300" />
+</Link>
        <Link to="/cart" title="Add to Cart" className="hidden md:block">
   <FaShoppingCart className="text-white hover:text-gray-400 transition-colors duration-300" />
 </Link>
@@ -54,8 +63,9 @@ function Navbar() {
     <Link to="/new-arrival" onClick={toggleMenu} className="hover:text-gray-400">New Arrival</Link>
     <Link to="/contact" onClick={toggleMenu} className="hover:text-gray-400">Contact Us</Link>
     <div className="flex gap-6 text-xl pt-4">
-      <FaSearch className="hover:text-gray-400" title="Search" />
-      <FaPhoneAlt className="hover:text-gray-400" title="Contact" />
+     
+     <Link to="/" title="signn"><FaUser className="hover:text-gray-400" /></Link>
+         <Link to="/signup" title="signn"><FaSignInAlt className="hover:text-gray-400" /></Link>
    <Link to="/cart" title="Cart"><FaShoppingCart className="hover:text-gray-400" /></Link>
     </div>
   </div>
