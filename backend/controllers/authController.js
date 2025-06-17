@@ -93,3 +93,50 @@ res.status(200).json({
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+exports.adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  const ADMIN_CREDS = {
+    email: "admin@gmail.com",
+    password: "admin123"
+  };
+
+  try {
+    // 🔍 Debug: Log incoming and expected values
+    console.log("👉 Input Email:", email);
+    console.log("👉 Input Password:", password);
+    console.log("✅ Expected Email:", ADMIN_CREDS.email);
+    console.log("✅ Expected Password:", ADMIN_CREDS.password);
+
+    // Check for empty fields
+    if (!email || !password) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Email and password are required' 
+      });
+    }
+
+    // 🔐 Check credentials
+    if (email.trim() === ADMIN_CREDS.email && password === ADMIN_CREDS.password) {
+      return res.status(200).json({ 
+        success: true,
+        message: 'Admin login successful',
+        isAdmin: true
+      });
+    }
+
+    // ❌ Incorrect login
+    return res.status(401).json({
+      success: false,
+      message: 'Invalid admin credentials'
+    });
+
+  } catch (err) {
+    console.error('Admin login error:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error during authentication'
+    });
+  }
+};

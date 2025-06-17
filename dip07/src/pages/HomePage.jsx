@@ -72,7 +72,7 @@ function HomePage() {
         showItemsInitially={3}
       />
     
-      <ProductGallery  initialProducts={initialProductsR} additionalProducts={additionalProductsR} />
+    
 
       <Clips/>
       <Footer/>

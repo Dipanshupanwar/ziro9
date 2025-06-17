@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [isAdminLogin, setIsAdminLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  // ✅ Function to sync cart after login
   const syncLocalCartAfterLogin = async (token) => {
     const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-
     const res = await fetch("http://localhost:5000/api/cart/sync", {
       method: "POST",
       headers: {
@@ -21,44 +22,60 @@ function Login() {
       },
       body: JSON.stringify({ items: localCart }),
     });
-
-    if (res.ok) {
-      localStorage.removeItem("cart");
-    }
+    if (res.ok) localStorage.removeItem("cart");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        form
-      );
+      const endpoint = isAdminLogin 
+        ? "http://localhost:5000/api/auth/admin/login" 
+        : "http://localhost:5000/api/auth/login";
 
-      const token = res.data.token;
+      const res = await axios.post(endpoint, form);
 
-      // ✅ Clear existing data and store new token
-     
-      localStorage.setItem("token", token);
-
-      // ✅ Sync local cart
-      await syncLocalCartAfterLogin(token);
-
-      // ✅ Navigate to homepage
-      navigate("/");
+      if (isAdminLogin) {
+        // Admin login flow
+        if (res.data.success) {
+          localStorage.setItem('isAdmin', 'true');
+          navigate("/admin/dashboard");
+        } else {
+          throw new Error(res.data.message || "Admin authentication failed");
+        }
+      } else {
+        // Regular user flow
+        const token = res.data.token;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(res.data.user)); // Store user data
+        await syncLocalCartAfterLogin(token);
+        navigate("/");
+      }
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      alert(err.response?.data?.message || 
+           (isAdminLogin ? "Invalid admin credentials" : "Login failed"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-zinc-900 p-8 rounded-xl shadow-lg w-full max-w-md text-white"
-      >
+      <form onSubmit={handleSubmit} className="bg-zinc-900 p-8 rounded-xl shadow-lg w-full max-w-md text-white relative">
+        {/* Admin Login Toggle */}
+        <button
+          type="button"
+          onClick={() => setIsAdminLogin(!isAdminLogin)}
+          className={`absolute -top-3 right-4 px-4 py-1 rounded-full text-sm font-medium ${
+            isAdminLogin ? "bg-red-600" : "bg-gray-600"
+          }`}
+        >
+          {isAdminLogin ? "Admin Mode" : "User Mode"}
+        </button>
+
         <h2 className="text-3xl font-semibold mb-6 text-center">
-          Welcome Back
+          {isAdminLogin ? "Admin Login" : "Welcome Back"}
         </h2>
 
         <input
@@ -80,10 +97,19 @@ function Login() {
 
         <button
           type="submit"
-          className="w-full py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold text-white transition-colors"
+          disabled={isLoading}
+          className={`w-full py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold text-white transition-colors ${
+            isLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          Login
+          {isLoading ? "Processing..." : isAdminLogin ? "Login as Admin" : "Login"}
         </button>
+
+        {isAdminLogin && (
+          <p className="mt-4 text-xs text-gray-400 text-center">
+            Note: Only admin credentials will work in this mode
+          </p>
+        )}
       </form>
     </div>
   );
