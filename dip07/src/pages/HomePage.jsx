@@ -8,74 +8,65 @@ import ProductGallery from "../components/ProductGallery";
 import Hero2 from "../components/Hero2";
 import PerfumeProductGallery from "../components/PerfumeProductGallery";
 import Hero3 from "../components/Hero3";
-
-
 import Clips from "../components/Clips";
 import Footer from "../layouts/Footer";
 import axios from "axios";
 
-
-
-
-
 function HomePage() {
-     const [initialProducts, setInitialProducts] = useState([]);
+  const [initialProducts, setInitialProducts] = useState([]);
   const [additionalProducts, setAdditionalProducts] = useState([]);
-  const [initialProductsR, setInitialProductsR] = useState([]);
-  const [additionalProductsR, setAdditionalProductsR] = useState([]);
-  const [ mafiaCollection , setMafiaCollection] = useState([])
-  const [ summerCollection , setSummerCollection] = useState([])
+  // const [initialProductsR, setInitialProductsR] = useState([]);
+  // const [additionalProductsR, setAdditionalProductsR] = useState([]);
+  const [mafiaCollection, setMafiaCollection] = useState([]);
+  const [summerCollection, setSummerCollection] = useState([]);
+
+  const BASE_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
-  
+    const fetchData = async () => {
+      try {
+        const res1 = await axios.get(`${BASE_URL}/api/products/initial`);
+        const res2 = await axios.get(`${BASE_URL}/api/products/additional`);
+        // const res3 = await axios.get(`${BASE_URL}/api/products/initial-r`);
+        // const res4 = await axios.get(`${BASE_URL}/api/products/additional-r`);
+        const res5 = await axios.get(`${BASE_URL}/api/perfumes/perfume`);
+        const res6 = await axios.get(`${BASE_URL}/api/perfumes/summercollection`);
 
-  const fetchData = async () => {
-    try {
-      const res1 = await axios.get("http://localhost:5000/api/products/initial");
-      const res2 = await axios.get("http://localhost:5000/api/products/additional");
-      const res3 = await axios.get("http://localhost:5000/api/products/initial-r");
-      const res4 = await axios.get("http://localhost:5000/api/products/additional-r");
-      const res5 = await axios.get("http://localhost:5000/api/perfumes/perfume")
-      const res6 = await axios.get("http://localhost:5000/api/perfumes/summercollection")
-      console.log  ( "displayedProducts:" , res1.data)
+        setInitialProducts(res1.data);
+        setAdditionalProducts(res2.data);
+        // setInitialProductsR(res3.data);
+        // setAdditionalProductsR(res4.data);
+        setMafiaCollection(res5.data);
+        setSummerCollection(res6.data);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
 
-      setInitialProducts(res1.data);
-      setAdditionalProducts(res2.data);
-      setInitialProductsR(res3.data);
-      setAdditionalProductsR(res4.data);
-      setMafiaCollection( res5.data);
-      setSummerCollection( res6.data)
-    } catch (error) {
-      console.error("Error fetching data with Axios:", error);
-    }
-  };
-
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
   return (
-       <div className="relative bg-black">
-      <Navbar/>
-      <TopImage/>
-      <ContinuousSlider/>
-      <Hero/>
-      <ProductGallery  initialProducts={initialProducts} additionalProducts={additionalProducts} />
-      <Hero2/>
-       <PerfumeProductGallery 
-        products={mafiaCollection} 
+    <div className="relative bg-black">
+      <Navbar />
+      <TopImage />
+      <ContinuousSlider />
+      <Hero />
+      <ProductGallery initialProducts={initialProducts} additionalProducts={additionalProducts} />
+      <Hero2 />
+      <PerfumeProductGallery
+        products={mafiaCollection}
         title="Mafia Collection"
         showItemsInitially={3}
       />
-      <Hero3/>
-         <PerfumeProductGallery 
-        products={summerCollection} 
-        title="Summer Collection" 
+      <Hero3 />
+      <PerfumeProductGallery
+        products={summerCollection}
+        title="Summer Collection"
         showItemsInitially={3}
       />
-    
-    
-
-      <Clips/>
-      <Footer/>
+      <Clips />
+      <Footer />
     </div>
   );
 }

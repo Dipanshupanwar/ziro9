@@ -12,21 +12,25 @@ function Footer() {
         message: ''
     });
     const [status, setStatus] = useState('');
+     const BASE_URL = import.meta.env.VITE_API_URL;
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post('http://localhost:5000/api/contact', formData);
-            setStatus('Message sent successfully!');
-            setFormData({ name: '', email: '', phone: '', message: '' });
-        } catch (error) {
-            setStatus('Failed to send message.');
-        }
-    };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+ 
+
+  try {
+    await axios.post(`${BASE_URL}/api/contact`, formData);
+    setStatus('Message sent successfully!');
+    setFormData({ name: '', email: '', phone: '', message: '' });
+  } catch (error) {
+    setStatus('Failed to send message.');
+  }
+};
+
 
     return (
         <footer className="bg-white text-black py-10 px-6 md:px-20">

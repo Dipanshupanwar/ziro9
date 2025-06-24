@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 
 const perfume = new mongoose.Schema({
   name: { type: String, required: true },
-  originalPrice: { type: String },
-  discountedPrice: { type: String },
+  originalPrice: { type: Number },
+  price: { type: Number },
   mainImage: { type: String, required: true },
   hoverImage: { type: String },
   discount: { type: String },

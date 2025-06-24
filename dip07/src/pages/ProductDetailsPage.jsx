@@ -8,7 +8,7 @@ function ProductDetails({ products = [] }) {
   const { addToCart } = useCart();
 
   const flatProducts = products.flat();
- const product = flatProducts.find(p => String(p.id || p._id) === id);
+  const product = flatProducts.find(p => String(p.id || p._id) === id);
 
 
   const [selectedSize, setSelectedSize] = useState('M');
@@ -22,33 +22,70 @@ function ProductDetails({ products = [] }) {
     setQuantity(prev => type === 'inc' ? prev + 1 : Math.max(prev - 1, 1));
   };
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity, selectedSize);
-    alert("Added to cart!");
-  };
+ const handleAddToCart = async () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Please login first!");
+    navigate("/signup");
+    return;
+  }
 
- const handleBuyNow = () => {
-  navigate('/buy', {
-    state: {
-      product,
-      quantity,
-      selectedSize,
-    },
-  });
+  try {
+    const res = await fetch("http://localhost:5000/api/cart/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        productId: product._id,
+        quantity,
+        size: selectedSize,
+      }),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert("Added to cart!");
+    } else {
+      alert("Failed to add to cart");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error adding to cart");
+  }
 };
+
+
+  const handleBuyNow = () => {
+    const isLoggedIn = localStorage.getItem("token"); // or isLoggedIn
+    if (!isLoggedIn) {
+      alert("Please log in to continue with the purchase.");
+      navigate("/signup");
+      return;
+    }
+    navigate('/buy', {
+      state: {
+        product,
+        quantity,
+        selectedSize,
+      },
+    });
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-6 grid md:grid-cols-2 gap-10">
       {/* Image Section */}
       <div className="border p-4 rounded-lg bg-white shadow-md">
-       {console.log("this is the game",product.mainImage)}
-        <img src={`/${product.mainImage}`}  alt={product.name} className="w-full h-auto rounded-lg" />
+        {console.log("this is the game", product.mainImage)}
+        <img src={`/${product.mainImage}`} alt={product.name} className="w-full h-auto rounded-lg" />
         {/* <img src={`/${product.hoverImage}`} alt="hover" className="mt-4 w-full h-auto rounded-lg" /> */}
       </div>
 
       {/* Info Section */}
       <div className="flex flex-col gap-4 text-black">
         <h1 className="text-3xl font-bold">{product.name}</h1>
+        {console.log(product.price)}
         <p className="text-xl">{product.price}</p>
         <p><strong>Discount:</strong> {product.discount}</p>
         <p><strong>Fabric:</strong> {product.Fabric}</p>
@@ -64,9 +101,8 @@ function ProductDetails({ products = [] }) {
               <button
                 key={size}
                 onClick={() => setSelectedSize(size)}
-                className={`px-4 py-2 rounded border ${
-                  selectedSize === size ? 'bg-black text-white' : 'bg-white text-black'
-                } hover:bg-black hover:text-white transition`}
+                className={`px-4 py-2 rounded border ${selectedSize === size ? 'bg-black text-white' : 'bg-white text-black'
+                  } hover:bg-black hover:text-white transition`}
               >
                 {size}
               </button>

@@ -45,7 +45,7 @@ function Navbar() {
        <Link to="/signup" title="Add to Cart" className="hidden md:block">
   <FaSignInAlt className="text-white hover:text-gray-400 transition-colors duration-300" />
 </Link>
-       <Link to="/cart" title="Add to Cart" className="hidden md:block">
+       <Link to="/addtocart" title="Add to Cart" className="hidden md:block">
   <FaShoppingCart className="text-white hover:text-gray-400 transition-colors duration-300" />
 </Link>
 
@@ -66,7 +66,7 @@ function Navbar() {
      
      <Link to="/" title="signn"><FaUser className="hover:text-gray-400" /></Link>
          <Link to="/signup" title="signn"><FaSignInAlt className="hover:text-gray-400" /></Link>
-   <Link to="/cart" title="Cart"><FaShoppingCart className="hover:text-gray-400" /></Link>
+   <Link to="/addtocart" title="Cart"><FaShoppingCart className="hover:text-gray-400" /></Link>
     </div>
   </div>
 </div>

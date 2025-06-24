@@ -6,6 +6,7 @@ const ProfilePage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
 
   useEffect(() => {
@@ -17,12 +18,12 @@ const ProfilePage = () => {
       return;
     }
 
-    fetch("http://localhost:5000/api/profile/me", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+   fetch(`${BASE_URL}/api/profile/me`, {
+  method: "GET",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+})
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch profile");
         return res.json();

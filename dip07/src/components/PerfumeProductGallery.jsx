@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function PerfumeProductGallery({ products = [], title = "", showItemsInitially = 3 }) {
+function PerfumeProductGallery({ products = [], title = "", showItemsInitially = 5 }) {
   const [showAll, setShowAll] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ function ProductCard({ product, hoveredProduct, setHoveredProduct, onClick }) {
         <h3 className="text-lg text-white font-medium">{product.name}</h3>
         <div className="flex justify-center items-center gap-2">
           <p className="text-gray-400 line-through text-sm">{product.originalPrice}</p>
-          <p className="text-red-500 font-bold">{product.discountedPrice}</p>
+          <p className="text-red-500 font-bold">{product.price}</p>
         </div>
       </div>
     </div>

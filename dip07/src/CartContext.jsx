@@ -8,6 +8,7 @@ const getToken = () => localStorage.getItem('token');
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(!!getToken());
+     const BASE_URL = import.meta.env.VITE_API_URL;
 
   const getId = (product) => product.id || product._id;
 
@@ -36,9 +37,14 @@ export const CartProvider = ({ children }) => {
     if (token) {
       setIsLoggedIn(true);
 
-      fetch('http://localhost:5000/api/cart', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+   
+
+fetch(`${BASE_URL}/api/cart`, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+})
+
         .then((res) => {
           if (!res.ok) throw new Error('Failed to fetch backend cart');
           return res.json();
@@ -70,14 +76,14 @@ export const CartProvider = ({ children }) => {
 
     const syncToBackend = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/cart/sync', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ items: cartItems }),
-        });
+      const res = await fetch(`${BASE_URL}/api/cart/sync`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
+  body: JSON.stringify({ items: cartItems }),
+});
 
         if (!res.ok) {
           console.error('Failed to sync cart:', await res.text());

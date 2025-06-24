@@ -9,6 +9,7 @@ function ContactPage() {
         phone: "",
         message: ""
     });
+    const BASE_URL = import.meta.env.VITE_API_URL;
 
     const [status, setStatus] = useState("");
 
@@ -19,7 +20,7 @@ function ContactPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:5000/api/contact", formData);
+           const res = await axios.post(`${BASE_URL}/api/contact`, formData);
             setStatus("Message sent successfully!");
             setFormData({ name: "", email: "", phone: "", message: "" });
         } catch (error) {
