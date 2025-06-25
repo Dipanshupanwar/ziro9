@@ -86,7 +86,7 @@ const AddToCart = () => {
                 <div>
                   <h2 className="text-lg font-semibold">{item.productId.name}</h2>
                   <p>Size: {item.size}</p>
-                  <p>Price: ₹{item.productId.price}</p>
+                  <p>Price: ₹{item.originalPrice}</p>
                 </div>
               </div>
 

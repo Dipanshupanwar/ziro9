@@ -1,10 +1,18 @@
 const mongoose = require('mongoose');
 
 const cartItemSchema = new mongoose.Schema({
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  productType: {
+    type: String, // 'Perfume', 'summercollection', 'InitialProduct', etc.
+    required: true
+  },
   quantity: Number,
-  size: String,
+  size: String
 });
+
 
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
@@ -16,7 +24,5 @@ const userSchema = new mongoose.Schema({
   cart: [cartItemSchema],
 });
 
-
-
 const User = mongoose.model('ZirUser', userSchema);
-export default User;
+module.exports = User; // ✅ CommonJS export

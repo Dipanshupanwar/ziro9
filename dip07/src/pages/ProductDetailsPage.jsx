@@ -22,39 +22,40 @@ function ProductDetails({ products = [] }) {
     setQuantity(prev => type === 'inc' ? prev + 1 : Math.max(prev - 1, 1));
   };
 
- const handleAddToCart = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    alert("Please login first!");
-    navigate("/signup");
-    return;
-  }
-
-  try {
-    const res = await fetch("http://localhost:5000/api/cart/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        productId: product._id,
-        quantity,
-        size: selectedSize,
-      }),
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      alert("Added to cart!");
-    } else {
-      alert("Failed to add to cart");
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please login first!");
+      navigate("/signup");
+      return;
     }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Error adding to cart");
-  }
-};
+
+    try {
+      const res = await fetch("http://localhost:5000/api/cart/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productId: product._id || product.id,
+          quantity,
+          size: selectedSize,
+          productType: "InitialProduct"
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("Added to cart!");
+      } else {
+        alert("Failed to add to cart");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error adding to cart");
+    }
+  };
 
 
   const handleBuyNow = () => {

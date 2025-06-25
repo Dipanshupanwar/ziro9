@@ -1,6 +1,5 @@
 export const mafiaCollection = [
   {
-    id: 1,
     name: 'Mafia',
     originalPrice: 'Rs 499',
     discountedPrice: 'Rs 399',
@@ -9,7 +8,6 @@ export const mafiaCollection = [
     discount: '21% OFF'
   },
   {
-    id: 2,
     name: 'Millionaire',
     originalPrice: 'Rs 499',
     discountedPrice: 'Rs 399',
@@ -18,7 +16,6 @@ export const mafiaCollection = [
     discount: '21% OFF'
   },
   {
-    id: 3,
     name: 'Mafia and Millionaire',
     originalPrice: 'Rs 899',
     discountedPrice: 'Rs 700',
@@ -26,15 +23,7 @@ export const mafiaCollection = [
     hoverImage: 'assets/Millionaire_4_1.webp',
     discount: '22% OFF'
   },
-  {
-    id: 4,
-    name: 'Limited Cap',
-    originalPrice: 'Rs 599',
-    discountedPrice: 'Rs 449',
-    mainImage: 'assets/cap-front.webp',
-    hoverImage: 'assets/cap-back.webp',
-    discount: '25% OFF'
-  }
+
 ];
 
 export const summerCollection = [

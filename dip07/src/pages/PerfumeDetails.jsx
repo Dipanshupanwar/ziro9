@@ -45,7 +45,8 @@ useEffect(() => {
       body: JSON.stringify({
         productId: product._id, // or product.id
         quantity,
-        size: selectedSize
+        size: selectedSize,
+          productType: "Perfume" 
       }),
     });
 
