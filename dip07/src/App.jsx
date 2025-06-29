@@ -22,6 +22,8 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import RefundPolicy from './pages/RefundPolicy';
 import ShippingPolicy from './pages/ShippingPolicy';
 import AddToCart from './pages/AddToCart';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 
 
@@ -31,37 +33,28 @@ function App() {
 
 
 
-  const [productSet1, setProductSet1] = useState([[], [], [], [], []]);
-  const [perfume, setPerfume] = useState([])
-  const [summer, setSummer] = useState([])
+  const [allProducts, setAllProducts] = useState([]);
+
   const BASE_URL = import.meta.env.VITE_API_URL;
 
-
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       try {
-
-
-        const res1 = await axios.get(`${BASE_URL}/api/products/initial`);
-        const res2 = await axios.get(`${BASE_URL}/api/products/additional`);
-        const res3 = await axios.get(`${BASE_URL}/api/products/initial-r`);
-        const res4 = await axios.get(`${BASE_URL}/api/products/additional-r`);
-        const res5 = await axios.get(`${BASE_URL}/api/perfumes/perfume`);
-        const res6 = await axios.get(`${BASE_URL}/api/perfumes/summercollection`);
-
-
-        // Grouped as per your logic
-        setProductSet1([res1.data, res2.data, res3.data, res4.data, res6.data]); // First set
-        setPerfume(res5.data);
-        setSummer(res6.data);
-        // Second set
+        const res = await axios.get(`${BASE_URL}/api/products`);
+        setAllProducts(res.data);
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        console.error("Error fetching products:", error.message);
       }
     };
 
-    fetchData();
+    fetchProducts();
   }, []);
+
+  // 👕 Filter data by category
+  const clothes = allProducts.filter(p => p.category === "clothes");
+  const perfumes = allProducts.filter(p => p.category === "perfume");
+  const summer = allProducts.filter(p => p.category === "summer");
+
   return (
     <BrowserRouter>
       <Navbar />
@@ -70,8 +63,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/new-arrival" element={<ArrivalPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/product/:id" element={<ProductDetails products={productSet1} />} />
-          <Route path="/perfume/:id" element={<PerfumeDetails perfumes={perfume} />} />
+          <Route path="/clothes/:id" element={<ProductDetails products={clothes} />} />
+          <Route path="/perfume/:id" element={<PerfumeDetails perfumes={perfumes} />} />
           <Route path="/summer/:id" element={<SummerCollectionDetails summerProducts={summer} />} />
           <Route path="/buy" element={<BuyNowPage />} />
          
@@ -85,6 +78,8 @@ function App() {
           <Route path="/refund" element={<RefundPolicy />} />
           <Route path="/shipping" element={<ShippingPolicy />} />
            <Route path="/addtocart" element={<AddToCart />} />
+           <Route path='/forgot-password' element={<ForgotPassword/>}/>
+           <Route path="/reset-password" element={<ResetPassword/>} />
 
 
 

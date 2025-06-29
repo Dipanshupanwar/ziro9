@@ -9,36 +9,25 @@ require("dotenv").config();
 // =========================
 // 📦 ROUTE IMPORTS
 // =========================
-const productRoutes = require("./routes/productRoutes");
-const perfumeRoutes = require("./routes/PerfumeRoutes");
+
 const profileRoute = require("./routes/profile");
-const cartRoutes = require("./routes/cart");
+const cartRoutes = require("./routes/cartRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const authRoutes = require("./routes/authRoutes");
 const paymentRoutes = require("./routes/payment");
+const Product = require("./models/ProductsModel");
+const pro = require ("./routes/productRoutes.js")
+
+
 
 
 // =========================
 // 🛒 DATA & MODELS (Optional Seed)
 // =========================
-const {
-  initialProducts,
-  additionalProducts,
-  initialProductsR,
-  additionalProductsR,
-} = require("./data/products");
-const { mafiaCollection, summerCollection } = require("./data/perfume");
+const { products } = require("./data/products.js");
+const Cart = require("./models/Cart");
 
-const {
-  InitialProduct,
-  AdditionalProduct,
-  InitialProductR,
-  AdditionalProductR,
-} = require("./models/ProductModel");
-const {
-  perfumeModel,
-  summerCollectionModel,
-} = require("./models/PerfumeModel");
+
 
 // =========================
 // 🚀 INIT EXPRESS
@@ -56,12 +45,13 @@ app.use(express.json());
 // 🔗 ROUTES
 // =========================
 app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/perfumes", perfumeRoutes);
 app.use("/api/profile", profileRoute);
 app.use("/api/cart", cartRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/products", pro );
+
+
 
 // =========================
 // 🌍 CONNECT TO MONGODB
@@ -77,22 +67,30 @@ mongoose
     // =========================
     // 📦 OPTIONAL: SEED DATA
     // =========================
+  // try {
+  //   await Product.deleteMany();
+  //   await Product.insertMany(products);
+  //   console.log("✅ Data seeded successfully");
+  // } catch (err) {
+  //   console.error("❌ Seeding failed:", err);
+  // }
+
     
-    await InitialProduct.deleteMany({});
-    await AdditionalProduct.deleteMany({});
-    await InitialProductR.deleteMany({});
-    await AdditionalProductR.deleteMany({});
-    await perfumeModel.deleteMany({});
-    await summerCollectionModel.deleteMany({});
+    // await InitialProduct.deleteMany({});
+    // await AdditionalProduct.deleteMany({});
+    // await InitialProductR.deleteMany({});
+    // await AdditionalProductR.deleteMany({});
+    // await perfumeModel.deleteMany({});
+    // await summerCollectionModel.deleteMany({});
 
-    await InitialProduct.insertMany(initialProducts);
-    await AdditionalProduct.insertMany(additionalProducts);
-    await InitialProductR.insertMany(initialProductsR);
-    await AdditionalProductR.insertMany(additionalProductsR);
-    await perfumeModel.insertMany(mafiaCollection);
-    await summerCollectionModel.insertMany(summerCollection);
+    // await InitialProduct.insertMany(initialProducts);
+    // await AdditionalProduct.insertMany(additionalProducts);
+    // await InitialProductR.insertMany(initialProductsR);
+    // await AdditionalProductR.insertMany(additionalProductsR);
+    // await perfumeModel.insertMany(mafiaCollection);
+    // await summerCollectionModel.insertMany(summerCollection);
 
-    console.log("🌱 Sample data seeded successfully!");
+    // console.log("🌱 Sample data seeded successfully!");
     
 
     // =========================

@@ -1,6 +1,10 @@
 const nodemailer = require('nodemailer');
 
 const sendOtp = async (email, otp) => {
+  if (!email) throw new Error("Email is required to send OTP");
+
+  console.log("Inside sendOtp, email:", email, "otp:", otp); // ✅ DEBUG
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -11,7 +15,7 @@ const sendOtp = async (email, otp) => {
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
-    to: email,
+    to: email, // ✅ This must NOT be empty
     subject: 'Ziro9 Email Verification OTP',
     html: `<h3>Your OTP is: ${otp}</h3>`,
   });

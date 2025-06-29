@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useCart } from '../CartContext.jsx'; // Add this import
 
 function SummerCollectionDetails({ summerProducts }) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart(); // Add this line to use the cart context
   const [product, setProduct] = useState(null);
   const [size, setSize] = useState("M");
   const [isHovered, setIsHovered] = useState(false);
@@ -43,19 +41,15 @@ function SummerCollectionDetails({ summerProducts }) {
     setQuantity(prev => type === 'inc' ? prev + 1 : Math.max(prev - 1, 1));
   };
 
-  const handleAddToCart = () => {
-     const isLoggedIn = localStorage.getItem("token"); // or isLoggedIn
-  if (!isLoggedIn) {
-    alert("Please log in to continue with the purchase.");
-    navigate("/signup");
-    return;
-  }
-    const handleAddToCart = async () => {
+  const handleAddToCart = async () => {
   const token = localStorage.getItem("token");
-  if (!token) {
-    alert("Please login first!");
-    navigate("/signup");
-    return;
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
+  console.log("this is my summer", userId)
+
+  if (!token || !userId) {
+    alert("Please log in to add to cart.");
+    return navigate("/signup");
   }
 
   try {
@@ -63,46 +57,43 @@ function SummerCollectionDetails({ summerProducts }) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        productId: product._id, // or product.id
+        productId: product._id,
         quantity,
-        size: selectedSize ,
-         productType: "summercollection"
+        size,
+        productType: "summercollection"
       }),
     });
 
     const data = await res.json();
-    if (data.success) {
+    if (res.ok) {
       alert("Added to cart!");
     } else {
-      alert("Failed to add to cart");
+      alert(data.message || "Failed to add to cart");
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Cart Error:", error);
     alert("Error adding to cart");
   }
 };
 
+  const handleBuyNow = () => {
+    const isLoggedIn = localStorage.getItem("token");
+    if (!isLoggedIn) {
+      alert("Please log in to continue with the purchase.");
+      navigate("/signup");
+      return;
+    }
+    navigate('/buy', {
+      state: {
+        product,
+        quantity,
+        selectedSize: size,
+      },
+    });
   };
-const handleBuyNow = () => {
-   const isLoggedIn = localStorage.getItem("token"); // or isLoggedIn
-  if (!isLoggedIn) {
-    alert("Please log in to continue with the purchase.");
-    navigate("/signup");
-    return;
-  }
-  navigate('/buy', {
-    state: {
-      product,
-      quantity,
-      selectedSize: size,
-    },
-  });
-};
-
-
 
   if (!product) {
     return <div className="text-center text-white py-20">Loading summer item...</div>;
@@ -134,8 +125,8 @@ const handleBuyNow = () => {
           <div className="w-full md:w-1/2">
             <h1 className="text-4xl font-bold mb-3">{product.name}</h1>
             <div className="flex items-center gap-4 mb-4">
-              <span className="text-gray-400 line-through text-lg">{product.originalPrice}</span>
-              <span className="text-red-400 text-2xl font-bold">{product.discountedPrice}</span>
+              <span className="text-gray-400 line-through text-lg">₹{product.originalPrice}</span>
+              <span className="text-red-400 text-2xl font-bold">₹{product.discountedPrice || product.price}</span>
             </div>
 
             <div className="mb-4">

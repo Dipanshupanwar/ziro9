@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import TopImage from "../components/TopImage";
 import ContinuousSlider from "../components/ContinuousSlider";
@@ -10,41 +11,29 @@ import PerfumeProductGallery from "../components/PerfumeProductGallery";
 import Hero3 from "../components/Hero3";
 import Clips from "../components/Clips";
 import Footer from "../layouts/Footer";
-import axios from "axios";
 
 function HomePage() {
-  const [initialProducts, setInitialProducts] = useState([]);
-  const [additionalProducts, setAdditionalProducts] = useState([]);
-  // const [initialProductsR, setInitialProductsR] = useState([]);
-  // const [additionalProductsR, setAdditionalProductsR] = useState([]);
-  const [mafiaCollection, setMafiaCollection] = useState([]);
-  const [summerCollection, setSummerCollection] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       try {
-        const res1 = await axios.get(`${BASE_URL}/api/products/initial`);
-        const res2 = await axios.get(`${BASE_URL}/api/products/additional`);
-        // const res3 = await axios.get(`${BASE_URL}/api/products/initial-r`);
-        // const res4 = await axios.get(`${BASE_URL}/api/products/additional-r`);
-        const res5 = await axios.get(`${BASE_URL}/api/perfumes/perfume`);
-        const res6 = await axios.get(`${BASE_URL}/api/perfumes/summercollection`);
-
-        setInitialProducts(res1.data);
-        setAdditionalProducts(res2.data);
-        // setInitialProductsR(res3.data);
-        // setAdditionalProductsR(res4.data);
-        setMafiaCollection(res5.data);
-        setSummerCollection(res6.data);
+        const res = await axios.get(`${BASE_URL}/api/products`);
+        setAllProducts(res.data);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        console.error("Error fetching products:", error.message);
       }
     };
 
-    fetchData();
+    fetchProducts();
   }, []);
+
+  // 👕 Filter data by category
+  const clothes = allProducts.filter(p => p.category === "clothes");
+  const perfumes = allProducts.filter(p => p.category === "perfume");
+  const summer = allProducts.filter(p => p.category === "summer");
 
   return (
     <div className="relative bg-black">
@@ -52,16 +41,20 @@ function HomePage() {
       <TopImage />
       <ContinuousSlider />
       <Hero />
-      <ProductGallery initialProducts={initialProducts} additionalProducts={additionalProducts} />
+
+      <ProductGallery products={clothes}
+       title="Clothes Collection"
+        showItemsInitially={3} />
+
       <Hero2 />
       <PerfumeProductGallery
-        products={mafiaCollection}
+        products={perfumes}
         title="Mafia Collection"
         showItemsInitially={3}
       />
       <Hero3 />
       <PerfumeProductGallery
-        products={summerCollection}
+        products={summer}
         title="Summer Collection"
         showItemsInitially={3}
       />
