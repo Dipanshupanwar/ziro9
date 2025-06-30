@@ -7,6 +7,8 @@ const ForgotPassword = () => {
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+        const BASE_URL = import.meta.env.VITE_API_URL;
+
 
   const navigate = useNavigate();
 
@@ -15,9 +17,10 @@ const ForgotPassword = () => {
     setMsg("");
     setError("");
     setLoading(true);
+  
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/send-otp", {
+      const res = await axios.post(  `${BASE_URL}/api/auth/send-otp`, {
         email,
       });
 

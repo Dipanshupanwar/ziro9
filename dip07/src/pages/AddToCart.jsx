@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 const AddToCart = () => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
+      const BASE_URL = import.meta.env.VITE_API_URL;
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -15,9 +16,10 @@ const AddToCart = () => {
       return;
     }
 
+
     const fetchCart = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/cart/get', {
+        const res = await fetch(`${BASE_URL}/api/cart/get`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

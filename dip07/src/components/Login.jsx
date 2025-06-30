@@ -7,16 +7,18 @@ function Login() {
   const [isAdminLogin, setIsAdminLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showForgot, setShowForgot] = useState(false); // 🔹 Forgot password toggle
+        const BASE_URL = import.meta.env.VITE_API_URL;
+
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
   const syncLocalCartAfterLogin = async (token) => {
     const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const res = await fetch("http://localhost:5000/api/cart/sync", {
+    const res = await fetch(`${BASE_URL}/api/cart/sync`
+, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,8 +36,10 @@ function Login() {
 
     try {
       const endpoint = isAdminLogin
-        ? "http://localhost:5000/api/auth/admin/login"
-        : "http://localhost:5000/api/auth/login";
+     
+
+        ?  `${BASE_URL}/api/auth/admin/login`
+        :`${BASE_URL}/api/auth/login`
 
       const res = await axios.post(endpoint, form);
 

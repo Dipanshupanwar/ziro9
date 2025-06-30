@@ -5,6 +5,7 @@ const BuyNowPage = () => {
   const location = useLocation();
   const { product, perfume, quantity, selectedSize } = location.state || {};
   const item = product || perfume;
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   const [prefill, setPrefill] = useState({
     name: '',
@@ -52,8 +53,9 @@ const BuyNowPage = () => {
     }
 
     const totalAmount = item.price * quantity;
+    
 
-    const result = await fetch("http://localhost:5000/api/payment/create-order", {
+    const result = await fetch(`${BASE_URL}/api/payment/create-order`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount: totalAmount }),

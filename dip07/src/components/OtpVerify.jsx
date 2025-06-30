@@ -8,8 +8,9 @@ function OtpVerify() {
   const navigate = useNavigate();
 
   const verifyOtp = async () => {
+    `${BASE_URL}/api/auth/verify-otp`
     try {
-      await axios.post("http://localhost:5000/api/auth/verify-otp", { email, otp });
+      await axios.post( `${BASE_URL}/api/auth/verify-otp`, { email, otp });
       alert("Email verified!");
       navigate("/login");
     } catch (err) {

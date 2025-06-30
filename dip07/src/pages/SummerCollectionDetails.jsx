@@ -8,6 +8,8 @@ function SummerCollectionDetails({ summerProducts }) {
   const [size, setSize] = useState("M");
   const [isHovered, setIsHovered] = useState(false);
   const [quantity, setQuantity] = useState(1);
+      const BASE_URL = import.meta.env.VITE_API_URL;
+
 
   useEffect(() => {
     if (summerProducts && summerProducts.length > 0) {
@@ -53,7 +55,7 @@ function SummerCollectionDetails({ summerProducts }) {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/cart/add", {
+    const res = await fetch(`${BASE_URL}/api/cart/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
